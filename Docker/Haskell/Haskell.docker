@@ -1,0 +1,15 @@
+FROM haskell:8.8.3
+
+RUN apt-get update
+RUN apt-get install python3 --assume-yes
+
+RUN cat /etc/*release
+
+RUN mkdir -p /opt/source-code /opt/state /opt/external
+
+COPY update.py /opt/source-code
+COPY HaskellL.hs /opt/source-code
+
+
+ENTRYPOINT python3 /opt/source-code/update.py
+
