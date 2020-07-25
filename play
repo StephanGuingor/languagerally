@@ -1,0 +1,60 @@
+#!/bin/bash
+
+CHECKPOINT=$(cat State/game_state.json | grep 'checkpoint' | tr -d '[:space:]' | cut -d':' -f 2 | cut -d ',' -f 1 | tr -d '"')
+
+
+# Kill Music PIDS
+VAR=$(ps -ef | grep afplay | tr -s ' ' | cut -d ' ' -f 3)
+arr=(`echo ${VAR}`);
+for val in $arr; do
+    kill -9 $val > /dev/null 2>&1 # or &>
+done
+
+afplay song.mp3 --volume 0.05 &
+
+case $CHECKPOINT in
+"null")
+    clear
+    python3.8 FirstLevelApp/introduction.py
+    ;;
+"lpy")
+    docker run --rm \
+    -it \
+    --mount type=bind,source=$(pwd)/PythonLang,target=/opt/external \
+    --mount type=bind,source=$(pwd)/State,target=/opt/state \
+    pythonlang:latest
+    ;;
+"lcpp")
+        docker run --rm \
+        -it \
+        --mount type=bind,source=$(pwd)/CPPLang,target=/opt/external \
+        --mount type=bind,source=$(pwd)/State,target=/opt/state \
+        cpplang:latest
+        ;;
+"ljs")
+    docker run --rm \
+    -it \
+    --mount type=bind,source=$(pwd)/JavaScriptLang,target=/opt/external \
+    --mount type=bind,source=$(pwd)/State,target=/opt/state \
+    cpplang:latest
+    ;;
+"ljava")
+    docker run --rm \
+    -it \
+    --mount type=bind,source=$(pwd)/JavaLang,target=/opt/external \
+    --mount type=bind,source=$(pwd)/State,target=/opt/state \
+    javalang
+    ;;
+"intro_menu")
+    clear 
+	python3.8 FirstLevelApp/introduction.py 
+    ;;
+esac
+
+
+# Kill Music PIDS
+VAR=$(ps -ef | grep afplay | tr -s ' ' | cut -d ' ' -f 3)
+arr=(`echo ${VAR}`);
+for val in $arr; do
+    kill -9 $val > /dev/null 2>&1 # or &>
+done

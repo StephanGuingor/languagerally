@@ -1,0 +1,8 @@
+FROM gcc:latest
+
+RUN mkdir -p /opt/external /opt/source-code /opt/state
+
+COPY json.hpp /opt/source-code
+COPY cppL.cpp /opt/source-code
+
+ENTRYPOINT g++ -o exe /opt/source-code/cppL.cpp && ./exe -std=c++17

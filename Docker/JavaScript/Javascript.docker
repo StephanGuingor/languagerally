@@ -1,0 +1,7 @@
+FROM node:14.5.0-alpine3.10
+
+RUN mkdir -p /opt/external /opt/source-code /opt/state
+
+COPY jsL.js /opt/source-code
+
+ENTRYPOINT node /opt/source-code/jsL.js

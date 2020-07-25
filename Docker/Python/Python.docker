@@ -1,0 +1,7 @@
+FROM python:3.6
+
+RUN mkdir -p /opt/external /opt/source-code /opt/state
+
+COPY pythonL.py /opt/source-code
+
+ENTRYPOINT python3 /opt/source-code/pythonL.py
