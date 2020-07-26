@@ -13,28 +13,6 @@ import random
 lines = 0
 
 
-class COLORS:
-    PINK = 199
-    BLUE = 32
-    GREEN = 119
-    WHITE = 15
-
-
-def b(m):
-    m = u"\u001b[1m" + m + u"\u001b[0m"
-    return m
-
-
-def loading(d=0.05):
-    c_m("Parsing into the matrix:  ", c=122, end="")
-    for i in range(0, 100):
-        time.sleep(d)
-        v = str(i+1)
-        print(f"\u001b[{len(str(i))+1}D" +
-              f'{v}%', flush=True, end="", sep=" ")
-    print()
-
-
 def title():
     c_m("-"*20, c=COLORS.BLUE)
     c_m("Welcome to the trial!", c=COLORS.BLUE)
@@ -76,10 +54,6 @@ def transition_effect():
         if not q.empty():
             run = q.get()
     t.join()
-
-
-def show_options():
-    pass
 
 
 quiz = Quiz(("Do you believe in love?", "I find love very weird"), ("Sometimes I don't know if I'm alive", "Yeah I don't know"),
@@ -365,12 +339,74 @@ def haskell():
 
 
 def assembly():
-    pass
+    # Emojo Challenge
+    print("\u001b[2J\u001b[H")
+    if data["language_phase"]["Assembly"]:
+
+        print_slow(
+            "I bet this was your last choice, it's only fair", 0.04)
+        time.sleep(0.5)
+        return 1
+
+    print_slow(
+        "Get ready to pop some pills, because this is \u001b[1m\u001b[38;5;32mAssembly\u001b[0m", 0.02)
+    print_slow(
+        "This is the Assembly challenge. Welcome to the pit.")
+    blink_trans()
+    print_slow(c_m("The task is as follow:", ret=True, c=32), 0.02)
+    print_slow("\u001b[1m1)\u001b[0m "+c_m(
+        "Go into the newly created directory called AssemblyLang", ret=True, c=COLORS.GREEN), 0.02)
+    print_slow("\u001b[1m2)\u001b[0m "+c_m(
+        "Open the asm file and follow the instructions. We are creating an add function.\n Easy.", ret=True, c=COLORS.GREEN), 0.02)
+    print_slow("\u001b[1m3)\u001b[0m "+c_m(
+        "When you think you are ready run the \u001b[1mplay\u001b[38;5;119m command", ret=True, c=COLORS.GREEN), 0.02)
+
+    print_slow("For a hint press h, else enter.")
+    v = input('- ')
+    if v == 'h':
+        print_slow(
+            "")
+
+    # Create Directory
+    path = "AssemblyLang"
+    path1 = "./AssemblyLang/App.asm"
+    if not os.path.exists(path):
+        try:
+            os.mkdir(path)
+            with open("./AssemblyLang/App.asm", "w") as f:
+                f.write(textwrap.dedent("""\
+                    ; -----------------------------------------------------------------------------
+                    ; Note that the parameters have already been passed in rdi, rsi.  We
+                    ; just have to return the value in rax.
+                    ; 
+                    ; I'll just say that this code should no t be that long, also remember that is is 64 bit
+                    ; Known as x64, and the registers start with an r.
+                    ; 
+                    ; I know you can do it, it's simple. 
+                    ; I consume this language almost as good as binary.
+                    ; -----------------------------------------------------------------------------
+
+                            global add
+                            section .text
+                    add:
+                    ; - - - - - - - - - - - - > Write code below this line :)
+                            mov     rax, rdi                
+                            add     rax, rsi               
+                            ret
+                                        """))
+
+            data["checkpoint"] = "lhs"
+            with open("./State/game_state.json", "w") as fw:
+                json.dump(data, fw)
+        except OSError:
+            print("Creation of the directory %s failed" % path)
+        except Exception:
+            pass
 
 
-def save_file():
-    with open("State/game_state.json", "w") as fw:
-        json.dump(data, fw)
+def all_done():
+    vals = data["language_phase"]
+    return all(vals.items())
 
 
 menu = Menu(Item("Javascript", js),
@@ -384,15 +420,24 @@ menu = Menu(Item("Javascript", js),
 
 if __name__ == "__main__":
     if not data["checkpoint"]:
-        # title()
-        # time.sleep(0.2)
-        # blink_trans()
-        # loading(0.1)
-        # transition_effect()
+        title()
+        time.sleep(0.2)
+        blink_trans()
+        loading(0.1)
+        transition_effect()
         quiz.start()
         data["checkpoint"] = "intro_menu"
 
-    if data["checkpoint"] == "intro_menu":
+    if all_done():
+        print_slow("Shit... I don't know what to do, let me think.")
+        blink_trans()
+        print_slow(
+            "I know, just go eat a dick for a while and dont bother me in a while.")
+        data["checkpoint"] = "mid"
+        with open("./State/game_state.json", "w") as fw:
+            json.dump(data, fw)
+
+    elif data["checkpoint"] == "intro_menu":
         menu.show()
     elif data["checkpoint"] == "lpy":
         py()

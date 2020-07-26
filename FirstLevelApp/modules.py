@@ -140,3 +140,30 @@ class Menu:
         except Exception:
             print_slow("I thought you could at least read...")
             self.show()
+
+
+def b(m):
+    m = u"\u001b[1m" + m + u"\u001b[0m"
+    return m
+
+
+class COLORS:
+    PINK = 199
+    BLUE = 32
+    GREEN = 119
+    WHITE = 15
+
+
+def loading(d=0.05):
+    c_m("Parsing into the matrix:  ", c=122, end="")
+    for i in range(0, 100):
+        time.sleep(d)
+        v = str(i+1)
+        print(f"\u001b[{len(str(i))+1}D" +
+              f'{v}%', flush=True, end="", sep=" ")
+    print()
+
+
+def save_file():
+    with open("State/game_state.json", "w") as fw:
+        json.dump(data, fw)

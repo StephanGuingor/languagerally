@@ -1,0 +1,12 @@
+FROM gcc:latest
+
+RUN apt-get update
+RUN apt-get install python3 --assume-yes
+RUN apt-get install nasm --assume-yes
+
+RUN mkdir -p /opt/external /opt/source-code /opt/state
+
+COPY update.py /opt/source-code
+COPY App.c /opt/source-code
+
+ENTRYPOINT python3 /opt/source-code/update.py

@@ -1,1 +1,1 @@
-{"checkpoint": "intro_menu", "language_phase": {"Assembly": false, "C++": true, "Java": true, "Javascript": true, "Python": true, "Haskell": true}}
+{"checkpoint": "intro_menu", "language_phase": {"Assembly": true, "C++": true, "Java": true, "Javascript": true, "Python": true, "Haskell": true}}
